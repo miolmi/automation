@@ -39,19 +39,23 @@ class Browser:
         self.add_input(by=By.ID, value='o_fiooldap_login_pass', text=password)
         self.click_button(by=By.ID, value='o_fiooldap_login_button')
 
-def get_connected_wlan_name():
-    # Uses subprocess to run the 'netsh wlan show interfaces' command and takes the output
-    output = subprocess.check_output(['netsh', 'wlan', 'show', 'interfaces']).decode('latin-1')
-    # Uses regex to find the wlan name (SSID) in the output
-    matches = re.findall(r"SSID\s+:\s(.+)\r\n", output)
-    if matches:
-        # If there is a match, return the first SSID found
-        return matches[0]
-    # If no SSID is found, return None. Means we are not connected to Wlan. A alert would be nice here
-    return None
+class Network:
+    def get_connected_wlan_name():
+        # Uses subprocess to run the 'netsh wlan show interfaces' command and takes the output
+        output = subprocess.check_output(['netsh', 'wlan', 'show', 'interfaces']).decode('latin-1')
+        # Uses regex to find the wlan name (SSID) in the output
+        matches = re.findall(r"SSID\s+:\s(.+)\r\n", output)
+        if matches:
+            # If there is a match, return the first SSID found
+            return matches[0]
+        # If no SSID is found, return None. Means we are not connected to Wlan. A alert would be nice here
+        return None
+
+
 
 if __name__ == '__main__':
-    connected_wlan = get_connected_wlan_name()
+    
+    connected_wlan = Network.get_connected_wlan_name()
 
     # Let's pretend that this is the school wlan
     if connected_wlan == 'FRITZ!Repeater 6000':
